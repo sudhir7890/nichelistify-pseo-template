@@ -1,0 +1,45 @@
+# .github/workflows/six-month-refresh.yml
+name: Six-Month Full Refresh
+
+on:
+  schedule:
+    - cron: "0 2 1 */6 *"   # 02:00 UTC on the 1st of Jan, Jul, etc.
+  workflow_dispatch:
+
+jobs:
+  full_refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate all active niches
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AFFILIATE_BASE_URL: ${{ secrets.AFFILIATE_BASE_URL }}
+        run: |
+          npm run generate:all-active-niches
+
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.js
+
+      - name: Commit & push updated Markdown and sitemap
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: six-month full refresh on $(date +'%Y-%m-%d')"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          branch: main
+          file_pattern: |
+            data/**/*.md,
+            public/sitemap.xml

@@ -1,0 +1,10 @@
+new-york
+los-angeles
+chicago
+houston
+phoenix
+philadelphia
+san-antonio
+san-diego
+dallas
+san-jose

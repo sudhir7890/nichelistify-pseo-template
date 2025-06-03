@@ -1,0 +1,22 @@
+{
+  "name": "nichelistify-pseo-template",
+  "version": "1.0.0",
+  "scripts": {
+    "generate:new-niche": "node scripts/generate-new-niche.js",
+    "generate:all-active-niches": "node scripts/generate-all.js",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "openai": "^4.0.0",
+    "rss-parser": "^3.12.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.3",
+    "next": "^13.4.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3"
+  }
+}

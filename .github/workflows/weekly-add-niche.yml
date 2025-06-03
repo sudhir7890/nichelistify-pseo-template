@@ -1,0 +1,69 @@
+# .github/workflows/weekly-add-niche.yml
+name: Weekly Add New Niche & Generate Pages
+
+on:
+  schedule:
+    - cron: "0 2 * * 0"   # Sunday at 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  add_niche_and_generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Determine next niche to add
+        id: pick-niche
+        run: |
+          NEXT=$(grep -v '^$' niches_master.txt | grep -Fxv -f active_niches.txt | head -n1)
+          if [ -z "$NEXT" ]; then
+            echo "No more niches to add. Exiting."
+            exit 0
+          fi
+          echo "Next niche: $NEXT"
+          echo "::set-output name=next_niche::$NEXT"
+
+      - name: Append next niche to active_niches.txt
+        if: steps.pick-niche.outputs.next_niche != ''
+        run: |
+          echo "${{ steps.pick-niche.outputs.next_niche }}" >> active_niches.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add active_niches.txt
+          git commit -m "chore: add niche ${{ steps.pick-niche.outputs.next_niche }} to active_niches.txt"
+          git push origin main
+
+      - name: Generate pages for the newly added niche
+        if: steps.pick-niche.outputs.next_niche != ''
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AFFILIATE_BASE_URL: ${{ secrets.AFFILIATE_BASE_URL }}
+        run: |
+          npm run generate:new-niche -- "${{ steps.pick-niche.outputs.next_niche }}"
+
+      - name: Generate sitemap
+        if: steps.pick-niche.outputs.next_niche != ''
+        run: node scripts/generate-sitemap.js
+
+      - name: Commit & push new Markdown files and sitemap
+        if: steps.pick-niche.outputs.next_niche != ''
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: generate pages & sitemap for ${{ steps.pick-niche.outputs.next_niche }} on $(date +'%Y-%m-%d')"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          branch: main
+          file_pattern: |
+            data/*_${{ steps.pick-niche.outputs.next_niche }}.md,
+            public/sitemap.xml

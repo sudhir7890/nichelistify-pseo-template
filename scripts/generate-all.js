@@ -3,7 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const Parser = require('rss-parser');
-const { Configuration, OpenAIApi } = require('openai');
+
+// 𝗖𝗵𝗮𝗻𝗴𝗲: Import OpenAI as a class
+const OpenAI = require('openai');
 require('dotenv').config();
 
 // --- Config from env ---
@@ -14,10 +16,10 @@ if (!OPENAI_API_KEY) {
   process.exit(1);
 }
 
-// Initialize OpenAI
-const openai = new OpenAIApi(new Configuration({ apiKey: OPENAI_API_KEY }));
+// 𝗖𝗵𝗮𝗻𝗴𝗲: Instantiate OpenAI client directly
+const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-// Slugify
+// Slugify helper
 function slugify(raw) {
   return raw
     .toLowerCase()
@@ -27,7 +29,7 @@ function slugify(raw) {
     .replace(/^-+|-+$/g, '');
 }
 
-// Capitalize
+// Capitalize helper
 function capitalize(slug) {
   return slug
     .split('-')
@@ -131,15 +133,16 @@ ${businessLines}
 Output only valid Markdown.
 `;
 
+  // 𝗖𝗵𝗮𝗻𝗴𝗲: Use openai.chat.completions.create() on the new client
   const MAX_RETRIES = 3;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const completion = await openai.createChatCompletion({
+      const completion = await openai.chat.completions.create({
         model: 'gpt-4',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
       });
-      return completion.data.choices[0].message.content;
+      return completion.choices[0].message.content;
     } catch (e) {
       console.error(`⚠️ GPT-4 call failed for ${citySlug}/${niche} (attempt ${attempt}): ${e.message}`);
       if (attempt === MAX_RETRIES) throw e;

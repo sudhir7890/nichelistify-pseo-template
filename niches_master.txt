@@ -1,6 +1,6 @@
-catcafes
-dogparks
-veganrestaurants
+cat-cafes
+dog-parks
+vegan-restaurants
 escape-rooms
 yoga-studios
 microbreweries

@@ -1,6 +1,10 @@
 # .github/workflows/weekly-add-niche.yml
 name: Weekly Add New Niche & Generate Pages
 
+# Give the workflow write access to the repo so it can commit.
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 2 * * 0"   # Sunday at 02:00 UTC

@@ -2,3 +2,4 @@ cat-cafes
 dog-parks
 vegan-restaurants
 escape-rooms
+yoga-studios

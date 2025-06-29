@@ -4,3 +4,4 @@ vegan-restaurants
 escape-rooms
 yoga-studios
 microbreweries
+art-galleries

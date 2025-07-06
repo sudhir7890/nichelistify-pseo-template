@@ -5,3 +5,4 @@ escape-rooms
 yoga-studios
 microbreweries
 art-galleries
+farmers-markets

@@ -6,3 +6,4 @@ yoga-studios
 microbreweries
 art-galleries
 farmers-markets
+indie-bookstores

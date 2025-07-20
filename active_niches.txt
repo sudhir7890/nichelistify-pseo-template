@@ -7,3 +7,4 @@ microbreweries
 art-galleries
 farmers-markets
 indie-bookstores
+co-working-spaces

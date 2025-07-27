@@ -8,3 +8,4 @@ art-galleries
 farmers-markets
 indie-bookstores
 co-working-spaces
+rock-climbing-gyms

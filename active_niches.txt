@@ -10,3 +10,4 @@ indie-bookstores
 co-working-spaces
 rock-climbing-gyms
 photography-studios
+vegan-bakeries

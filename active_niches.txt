@@ -11,3 +11,4 @@ co-working-spaces
 rock-climbing-gyms
 photography-studios
 vegan-bakeries
+craft-beer-bars

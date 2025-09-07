@@ -14,3 +14,4 @@ vegan-bakeries
 craft-beer-bars
 wine-tastings
 ceramic-studios
+flea-markets

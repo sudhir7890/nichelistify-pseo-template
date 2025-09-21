@@ -16,3 +16,4 @@ wine-tastings
 ceramic-studios
 flea-markets
 board-game-cafes
+trampoline-parks

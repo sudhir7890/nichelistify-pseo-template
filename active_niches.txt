@@ -17,3 +17,4 @@ ceramic-studios
 flea-markets
 board-game-cafes
 trampoline-parks
+roller-skating-rinks
